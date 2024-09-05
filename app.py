@@ -10,8 +10,6 @@ from langchain_huggingface import HuggingFaceEndpoint
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
-import gradio as gr
-from huggingface_hub import HfApi
 
 
 load_dotenv()
@@ -32,12 +30,7 @@ class RAGChatbot:
         self.vector_store = FAISS.from_texts(self.documents, self.embeddings)
 
         # Initialise Langchain RAG pipeline
-        self.llm = HuggingFaceEndpoint(
-            repo_id= "mistralai/Mistral-7B-Instruct-v0.3", 
-            temperature = 0.8, 
-            top_k = 50, 
-            huggingfacehub_api_token=os.getenv('HUGGINGFACE_API_KEY')
-            )
+        self.llm = self._initialize_llm()
 
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
@@ -63,12 +56,34 @@ class RAGChatbot:
     def _create_documents(self):
         return(self.data['Title'] + ". " + self.data['Text']).tolist()
     
+    def _initialize_llm(self):
+        """Initialize the Hugging Face LLM once, reusing the API token."""
+        # Only call the HuggingFace API once and reuse the LLM
+        return HuggingFaceEndpoint(
+            repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
+            temperature=0.8, 
+            top_k=50, 
+            huggingfacehub_api_token=os.getenv('HUGGINGFACE_API_KEY')  # Load token from environment variable
+        )
 
 def main():
     chatbot = RAGChatbot('data/subreddit_comments.csv')  
-    input = "What do NTU university students discuss in this subreddit?"   
-    result = chatbot.rag_chain.invoke(input)
-    print(result)
-
+    while True:
+        query = input("Enter your question here: ") 
+        if query == "stop":
+            break
+        result = chatbot.rag_chain.invoke(query)
+        print(result)
+    
 if __name__ == "__main__":
     main()
+
+
+# Sample questions:
+# What do students feel about the satisfactory/unsatisfactory option for their grades?
+# What challenges do NTU university students face?
+# What do NTU students discuss in this subreddit?
+# What do the university students feel about the campus transport?
+# What type of academic questions do the students ask in this subreddit? Be specific about the students' majors and questions asked.
+# Tell me more about NTU students' daily lives.
+# According to the subreddit, what are the most popular clubs in NTU?
