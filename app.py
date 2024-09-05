@@ -11,6 +11,8 @@ from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 import gradio as gr
+from huggingface_hub import HfApi
+
 
 load_dotenv()
 
@@ -21,7 +23,6 @@ class RAGChatbot:
         self.data = pd.read_csv(csv_file)
         
         # Initialise embedding model
-        self.embedding_model = SentenceTransformer(model_name)
         self.embeddings = HuggingFaceEmbeddings(model_name = model_name)
 
         # Create documents
@@ -41,8 +42,8 @@ class RAGChatbot:
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
             Your job is to study the student discussions in the subreddit for Nanyang Technological University (NTU). 
-            You wil answer questions about the student's discussions, their concerns, and other questions pertaining to student life at NTU.
-            Use the following context to answer the question. 
+            You wil answer questions about the students' discussions, their concerns, and other questions pertaining to student life at NTU.
+            Be as specific as possible, use the following context to answer the question. 
             If you don't know the answer, just say you don't know. 
             Keep the answer within 3 paragraphs and concise.
 
@@ -63,7 +64,11 @@ class RAGChatbot:
         return(self.data['Title'] + ". " + self.data['Text']).tolist()
     
 
-chatbot = RAGChatbot('data/subreddit_comments.csv')  
-input = "Were there any discussions on the Israel-Hamas conflict?"   
-result = chatbot.rag_chain.invoke(input)
-print(result)
+def main():
+    chatbot = RAGChatbot('data/subreddit_comments.csv')  
+    input = "What do NTU university students discuss in this subreddit?"   
+    result = chatbot.rag_chain.invoke(input)
+    print(result)
+
+if __name__ == "__main__":
+    main()
