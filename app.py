@@ -18,11 +18,11 @@ def load_embeddings(filtered_df):
     return chatbot
     
 
-df = load_data
+df = load_data()
 
 months =  st.select_slider(
     "Select how many months of Reddit posts to scrape",
-    options = [3, 6, 9, 12]
+    options = [3, 6, 9, 12] 
     )
 
 end_date = datetime.now(timezone.utc)
