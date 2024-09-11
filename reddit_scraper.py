@@ -1,11 +1,7 @@
 import pandas as pd
 import praw
 import os
-from dotenv import load_dotenv
 from datetime import datetime, timezone, timedelta
-
-
-load_dotenv()
 
 
 def initialize_reddit_scraper():

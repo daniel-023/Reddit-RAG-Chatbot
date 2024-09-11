@@ -6,7 +6,9 @@ from datetime import datetime, timedelta, timezone
 
 @st.cache_data
 def load_data():
-    return pd.read_csv('data/reddit_data.csv')
+    df = pd.read_csv('data/reddit_data.csv')
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'])  
+    return df
 
 
 @st.cache_data
