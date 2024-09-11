@@ -13,6 +13,7 @@ def load_data():
 
 @st.cache_data
 def load_embeddings(filtered_df):
+    load_data()
     chatbot = RAGChatbot(filtered_df, api_key = st.secrets["HUGGINGFACE_API_KEY"])
     return chatbot
     
@@ -33,7 +34,7 @@ chatbot = load_embeddings(filtered_df)
 st.title("NTU Subreddit Chatbot")
 
 # Store LLM generated responses
-if "messages" not in st.session_state():
+if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "Welcome! Please ask any questions regarding student life at NTU :)"}]
 
 # Display chat messages
