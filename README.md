@@ -1,5 +1,3 @@
 # r/NTU RAG Chatbot
-## Task List
-- [x] Test PRAW on NTU Subreddit
-- [ ] Build DF with scraped data
-- [ ] Convert DF to Vector Database with Pinecone
+
+A Retrieval-Augmented Generation (RAG) chatbot designed to analyze and answer questions related to discussions in the Nanyang Technological University (NTU) subreddit. This chatbot uses Reddit posts and comments from the NTU subreddit, vectorizes the data using embeddings, and retrieves relevant information to provide detailed answers to user queries.
