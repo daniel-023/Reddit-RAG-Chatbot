@@ -12,9 +12,10 @@ def load_data():
 
 
 @st.cache_resource
-def load_embeddings(filtered_df):
-    chatbot = RAGChatbot(filtered_df, api_key = st.secrets["HUGGINGFACE_API_KEY"])
-    chatbot.load_data(filtered_df)
+def load_embeddings(df):
+    chatbot = RAGChatbot(api_key = st.secrets["HUGGINGFACE_API_KEY"], df=df)
+    chatbot.load_df(filtered_df)
+    chatbot.build_vector_db()
     return chatbot
     
 
@@ -49,15 +50,8 @@ if input := st.chat_input():
         with st.chat_message("user"):
             st.write(input)
 
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] == "user":
-    with st.chat_message("assistant"):
-        with st.spinner("Working on your answer..."):
-            try:
-                response = chatbot.ask_question(input)
-            except Exception as e:
-                response = "Sorry, an error occurred while processing your request. Please try again."
-                st.error(f"Error: {str(e)}")
-            
-            st.write(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+        with st.chat_message("assistant"):
+            with st.spinner("Working on your answer..."):
+                response = chatbot.generate_answer(input)
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                st.write(response)

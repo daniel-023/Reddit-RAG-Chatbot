@@ -8,63 +8,66 @@ from langchain.schema.output_parser import StrOutputParser
 
 
 class RAGChatbot:
-    def __init__(self, df, model_name = 'all-MiniLM-L6-v2', api_key=None):
-
-        # Initialise embedding model
-        self.embedding_model = SentenceTransformer(model_name)
+    def __init__(self, api_key, df):
+        self.documents = []
+        self.embeddings = None
         self.index = None
-        self.data = df
         self.api_key = api_key
-        # Initialise Langchain RAG pipeline
-        self.llm = self._initialize_llm()
-
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
-            Your job is to study the student discussions in the subreddit for Nanyang Technological University (NTU). 
-            You wil answer questions about the students' discussions, their concerns, and other questions pertaining to student life at NTU.
-            Be as specific as possible, use the following context to answer the question. 
-            If you don't know the answer, just say you don't know. 
-            Keep the answer within 3 paragraphs and concise.
+        Your task is to analyze student discussions in the subreddit for Nanyang Technological University (NTU). 
+        You will answer questions about the students' concerns, discussions, and other aspects of student life at NTU.
+        When providing your response:
+        - Be as specific as possible and **always include direct quotes** from the relevant discussions as evidence for your answers.
+        - Use the **exact wording** from the context provided to ensure accuracy.
+        - If the context does not provide enough information to answer the question, simply respond with "I don't know."
+        - Keep your answers concise and to the point, focusing only on the information directly related to the question.
+
 
             Context: {context}
             Question: {question}
             Answer:
             """
         )
-
-    def load_data(self, data):
-        self.data = data
-        self._generate_embeddings()
-
-    def _generate_embeddings(self):
-        if self.data is not None:
-            # Ensure there are no null values in 'Title' or 'Text'
-            self.data.fillna({'Title': 'No Title'}, inplace=True)
-            self.data.fillna({'Text': 'No Text'}, inplace=True)
-            texts = self.data['Title'] + ": " + self.data['Text']
-            embeddings = self.embedding_model.encode(texts.tolist(), convert_to_numpy=True)
-            self.index = faiss.IndexFlatL2(embeddings.shape[1])  # L2 distance: Euclidean distance
-            self.index.add(embeddings)
-
-        else:
-            raise ValueError("No data loaded to generate embeddings.")
+        self.load_df(df)
+        self.build_vector_db()
+        self.llm = self._initialize_llm()
 
 
-    def query_faiss(self, query, top_k = 5):
-        query_embedding = self.embedding_model.encode([query])[0]
-        distances, indices = self.index.search(np.array([query_embedding]), top_k)
-        relevant_rows = self.data.iloc[indices[0]]
-        return relevant_rows, distances            
+    def load_df(self, df):
+        df.fillna({'Title': 'No Title', 'Text': 'No Text'}, inplace=True)
+        self.documents = (df['Title'] + ": " + df['Text']).tolist()
 
+        
+    def build_vector_db(self):
+        self.embeddings = self.model.encode([text for text in self.documents])
+        # Create a FAISS index
+        self.index = faiss.IndexFlatL2(self.embeddings.shape[1])  # L2 distance: Euclidean distance
+        self.index.add(np.array(self.embeddings))
 
-    def generate_answer(self, relevant_rows, question):
-        relevant_contexts = "\n".join(
-            (relevant_rows['Title'] + ": " + relevant_rows['Text']).tolist()
+    
+    def search_documents(self, query, k):
+        query_embedding = self.model.encode([query])
+        D, I = self.index.search(np.array(query_embedding), k)
+        results = [self.documents[i] for i in I[0]]
+        return results if results else ["No relevant documents found"]
+    
+    def _initialize_llm(self):
+        return HuggingFaceEndpoint(
+            repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
+            temperature=0.2, 
+            top_k=20, 
+            huggingfacehub_api_token=self.api_key  # Load token from environment variable
         )
+    
+    def generate_answer(self, query):
+        results = self.search_documents(query, 10)
+        relevant_contexts = "\n".join(results)
 
         inputs = {
             "context": relevant_contexts,
-            "question": question
+            "question": query
         }
 
         rag_chain = (
@@ -73,25 +76,10 @@ class RAGChatbot:
             | StrOutputParser()
         )
         return rag_chain.invoke(inputs)
-    
 
-    def ask_question(self, question):
-        if self.index is None:
-            raise ValueError("FAISS index is not initialised. Please load data first")
-            
-        relevant_rows, distances = self.query_faiss(question, top_k = 5)
-        return self.generate_answer(relevant_rows, question)
+          
 
-
-    def _initialize_llm(self):
-        return HuggingFaceEndpoint(
-            repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
-            temperature=0.4, 
-            top_k=35, 
-            huggingfacehub_api_token=self.api_key  # Load token from environment variable
-        )
-
-
+          
 # Sample questions:
 # What do students feel about the satisfactory/unsatisfactory option for their grades?
 # What challenges do NTU university students face?
