@@ -11,10 +11,10 @@ def load_data():
     return df
 
 
-@st.cache_data
+@st.cache_resource
 def load_embeddings(filtered_df):
-    load_data()
     chatbot = RAGChatbot(filtered_df, api_key = st.secrets["HUGGINGFACE_API_KEY"])
+    chatbot.load_data(filtered_df)
     return chatbot
     
 

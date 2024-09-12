@@ -38,6 +38,9 @@ class RAGChatbot:
 
     def _generate_embeddings(self):
         if self.data is not None:
+            # Ensure there are no null values in 'Title' or 'Text'
+            self.data.fillna({'Title': 'No Title'}, inplace=True)
+            self.data.fillna({'Text': 'No Text'}, inplace=True)
             texts = self.data['Title'] + ": " + self.data['Text']
             embeddings = self.embedding_model.encode(texts.tolist(), convert_to_numpy=True)
             self.index = faiss.IndexFlatL2(embeddings.shape[1])  # L2 distance: Euclidean distance
@@ -47,11 +50,10 @@ class RAGChatbot:
             raise ValueError("No data loaded to generate embeddings.")
 
 
-    def query_faiss(self, query, top_k = 10):
+    def query_faiss(self, query, top_k = 5):
         query_embedding = self.embedding_model.encode([query])[0]
         distances, indices = self.index.search(np.array([query_embedding]), top_k)
-        
-        relevant_rows = self.data.iloc[indices]
+        relevant_rows = self.data.iloc[indices[0]]
         return relevant_rows, distances            
 
 
@@ -60,28 +62,32 @@ class RAGChatbot:
             (relevant_rows['Title'] + ": " + relevant_rows['Text']).tolist()
         )
 
+        inputs = {
+            "context": relevant_contexts,
+            "question": question
+        }
+
         rag_chain = (
-            {"context": relevant_contexts, "question": question}
-            | self.prompt
+            self.prompt 
             | self.llm
             | StrOutputParser()
         )
-        return rag_chain.invoke(question)
+        return rag_chain.invoke(inputs)
     
 
     def ask_question(self, question):
         if self.index is None:
             raise ValueError("FAISS index is not initialised. Please load data first")
-        
-        indices, distances = self.query_faiss(question, top_k = 10)
-        return self.generate_answer(indices, question)
+            
+        relevant_rows, distances = self.query_faiss(question, top_k = 5)
+        return self.generate_answer(relevant_rows, question)
 
 
     def _initialize_llm(self):
         return HuggingFaceEndpoint(
             repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
-            temperature=0.8, 
-            top_k=50, 
+            temperature=0.4, 
+            top_k=35, 
             huggingfacehub_api_token=self.api_key  # Load token from environment variable
         )
 
