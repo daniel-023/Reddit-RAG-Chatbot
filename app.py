@@ -68,4 +68,4 @@ if input := st.chat_input():
             with st.spinner("Working on your answer..."):
                 response = chatbot.generate_answer(input)
                 st.session_state.messages.append({"role": "assistant", "content": response})
-                st.write(response)
+                st.write(response.replace('\n', ' '))
