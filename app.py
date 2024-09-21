@@ -37,7 +37,7 @@ chatbot = load_chatbot(df=df, _index=index)
 
 
 months =  st.select_slider(
-    "Select how many months of Reddit posts to scrape",
+    "Choose the time range for Reddit posts (in months):",
     options = [3, 6, 9, 12] 
     )
 
