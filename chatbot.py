@@ -84,7 +84,7 @@ class RAGChatbot:
 
           
 # Sample questions:
-# What do students feel about the satisfactory/unsatisfactory option for their grades?
+# What do students feel about the snew FGO system for their grades?
 # What challenges do NTU university students face?
 # What do NTU students discuss in this subreddit?
 # What do the university students feel about the campus transport?
