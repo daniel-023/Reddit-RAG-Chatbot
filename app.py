@@ -1,6 +1,7 @@
 from chatbot import RAGChatbot
 import streamlit as st
 import pandas as pd
+import faiss
 from datetime import datetime, timedelta, timezone
 
 
@@ -12,14 +13,28 @@ def load_data():
 
 
 @st.cache_resource
-def load_embeddings(df):
-    chatbot = RAGChatbot(api_key = st.secrets["HUGGINGFACE_API_KEY"], df=df)
-    chatbot.load_df(filtered_df)
-    chatbot.build_vector_db()
+def load_index(index_path:str):
+    index = faiss.read_index(index_path)
+    return index
+
+@st.cache_resource
+def load_chatbot(df, _index):
+    chatbot = RAGChatbot(api_key=st.secrets["HUGGINGFACE_API_KEY"], df=df, index=index)
     return chatbot
-    
+
+
+# @st.cache_resource
+# def load_embeddings(df):
+#     
+#     chatbot.load_df(filtered_df)
+#     chatbot.build_vector_db()
+#     return chatbot
+
 
 df = load_data()
+index = load_index('data/faiss_index.index')
+chatbot = load_chatbot(df=df, _index=index)
+
 
 months =  st.select_slider(
     "Select how many months of Reddit posts to scrape",
@@ -30,7 +45,6 @@ end_date = datetime.now(timezone.utc)
 start_date = end_date-timedelta(days=30 * months)
 filtered_df = df[df['Timestamp'] > start_date]
 
-chatbot = load_embeddings(filtered_df)
 
 st.title("NTU Subreddit Chatbot")
 

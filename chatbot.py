@@ -1,6 +1,5 @@
 import faiss
 import numpy as np
-import pandas as pd
 from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain.prompts import PromptTemplate
@@ -8,10 +7,10 @@ from langchain.schema.output_parser import StrOutputParser
 
 
 class RAGChatbot:
-    def __init__(self, api_key, df):
+    def __init__(self, api_key, df, index):
         self.documents = []
         self.embeddings = None
-        self.index = None
+        self.index = index
         self.api_key = api_key
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.prompt = PromptTemplate(input_variables=["context", "question"],
@@ -31,7 +30,6 @@ class RAGChatbot:
             """
         )
         self.load_df(df)
-        self.build_vector_db()
         self.llm = self._initialize_llm()
 
 
@@ -40,11 +38,11 @@ class RAGChatbot:
         self.documents = (df['Title'] + ": " + df['Text']).tolist()
 
         
-    def build_vector_db(self):
-        self.embeddings = self.model.encode([text for text in self.documents])
-        # Create a FAISS index
-        self.index = faiss.IndexFlatL2(self.embeddings.shape[1])  # L2 distance: Euclidean distance
-        self.index.add(np.array(self.embeddings))
+    # def build_vector_db(self):
+    #     self.embeddings = self.model.encode([text for text in self.documents])
+    #     # Create a FAISS index
+    #     self.index = faiss.IndexFlatL2(self.embeddings.shape[1])  # L2 distance: Euclidean distance
+    #     self.index.add(np.array(self.embeddings))
 
     
     def search_documents(self, query, k):
@@ -53,6 +51,7 @@ class RAGChatbot:
         results = [self.documents[i] for i in I[0]]
         return results if results else ["No relevant documents found"]
     
+
     def _initialize_llm(self):
         return HuggingFaceEndpoint(
             repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
@@ -61,6 +60,7 @@ class RAGChatbot:
             huggingfacehub_api_token=self.api_key  # Load token from environment variable
         )
     
+
     def generate_answer(self, query):
         results = self.search_documents(query, 10)
         relevant_contexts = "\n".join(results)
