@@ -65,7 +65,7 @@ class RAGChatbot:
     
 
     def generate_answer(self, query):
-        results = self.search_documents(query, 10)
+        results = self.search_documents(query, 5)
         relevant_contexts = "\n".join(results)
 
         inputs = {
