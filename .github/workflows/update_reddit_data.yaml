@@ -25,7 +25,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install praw pandas
+        pip install praw pandas faiss
 
     
     - name: Run the data update script
