@@ -40,13 +40,6 @@ class RAGChatbot:
         df.fillna({'Title': 'No Title', 'Text': 'No Text'}, inplace=True)
         self.documents = (df['Title'] + ": " + df['Text']).tolist()
 
-        
-    # def build_vector_db(self):
-    #     self.embeddings = self.model.encode([text for text in self.documents])
-    #     # Create a FAISS index
-    #     self.index = faiss.IndexFlatL2(self.embeddings.shape[1])  # L2 distance: Euclidean distance
-    #     self.index.add(np.array(self.embeddings))
-
     
     def search_documents(self, query, k):
         query_embedding = self.model.encode([query])
