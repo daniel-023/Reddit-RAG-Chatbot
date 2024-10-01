@@ -4,7 +4,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 
 
-df = pd.read_csv('data/reddit_data.csv', parse_dates=['Timestamp'])
+df = pd.read_csv('data/reddit_data.csv')
 
 df.fillna({'Title': 'No Title', 'Text': 'No Text'}, inplace=True)
 
