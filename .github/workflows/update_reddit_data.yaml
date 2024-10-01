@@ -6,6 +6,8 @@ on:
     - cron: "0 0 1 * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
 
 jobs: 
   update-data:
@@ -42,9 +44,9 @@ jobs:
 
 
     - name: Commit and push changes
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: "Updated Reddit data for the last month"
-        file_pattern: |
-          data/reddit_data.csv
-        branch: ${{ github.ref }}
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add data/reddit_data.csv
+        git commit -m "Updated Reddit data for the last month"
+        git push origin main
