@@ -53,7 +53,7 @@ def scrape_posts(reddit, subreddit_name, start_date, end_date, limit = 1000):
 def update_reddit_data():
     try:
         df = pd.read_csv('data/reddit_data.csv')
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce', utc=True)
     except FileNotFoundError:
         df = pd.DataFrame()
         
