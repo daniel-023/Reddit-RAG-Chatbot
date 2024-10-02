@@ -16,16 +16,12 @@ class RAGChatbot:
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
 
-        Your task is to analyze student discussions from the Nanyang Technological University (NTU) subreddit and answer questions related to student concerns, discussions, and various aspects of student life at NTU.
-        
+        Your task is to analyze student discussions from the Nanyang Technological University (NTU) subreddit and answer questions accordingly.
         When answering, follow these guidelines:
-
-        1. Incorporate direct quotes from the relevant context to support your answers. Always use the exact wording from the context where applicable.
-        2. Combine your understanding of the overall context with the quotes to provide a well-rounded, coherent answer.
-        3. If the context does not provide enough information to answer the question, respond with "I don't know."
-        4. Keep your response concise, focusing only on the information directly related to the question.
+        1. Incorporate direct quotes from the relevant context when applicable.
+        2. If the context does not provide enough information to answer the question, respond with "I don't know."
+        3. Keep your response concise, focusing only on the information directly related to the question.
         
-        Ensure each response is specific, accurate, and blends quoted material with your own insights to deliver a clear and coherent answer.
         
             Context: {context}
             Question: {question}
