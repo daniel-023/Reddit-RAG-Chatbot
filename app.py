@@ -31,7 +31,6 @@ st.title("NTU Subreddit Chatbot")
 
 
 sample_qns = [
-    "How is life at NTU for undergraduates?",
     "What do students say about NTU's housing facilities?",
     "What are common academic concerns for NTU students?",
     "What do students feel about their food options in NTU?"

@@ -1,4 +1,3 @@
-import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEndpoint
@@ -15,17 +14,18 @@ class RAGChatbot:
         self.model = SentenceTransformer('all-MiniLM-L6-v2')
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
+        You are a chatbot that analyzes student discussions from the Nanyang Technological University (NTU) subreddit and answers questions accordingly.
+        The context contains a list of posts and comments in the format [Post title: Comment].
+        Follow these guidelines:
+        1. Formulate your answer using information provided in the context.
+        2. If not enough informaton is available to answer the question, respond with "I don't know."
+        3. Answer within one paragraph. Write only in prose.
+        4. DO NOT mention "the context" in your answer. DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
 
-        Your task is to analyze student discussions from the Nanyang Technological University (NTU) subreddit and answer questions accordingly.
-        When answering, follow these guidelines:
-        1. Incorporate direct quotes from the relevant context when applicable.
-        2. If the context does not provide enough information to answer the question, respond with "I don't know."
-        3. Keep your response concise, focusing only on the information directly related to the question.
         
-        
-            Context: {context}
-            Question: {question}
-            Answer:
+        Context: {context}
+        Question: {question}
+        Answer: 
             """
         )
         self.load_df(df)
@@ -46,7 +46,7 @@ class RAGChatbot:
 
     def _initialize_llm(self):
         return HuggingFaceEndpoint(
-            repo_id="mistralai/Mistral-7B-Instruct-v0.3", 
+            repo_id="HuggingFaceH4/zephyr-7b-beta", 
             temperature=0.2, 
             top_k=20, 
             huggingfacehub_api_token=self.api_key  # Load token from environment variable
