@@ -20,7 +20,7 @@ class RAGChatbot:
         1. Formulate your answer using information provided in the context.
         2. If not enough informaton is available to answer the question, respond with "I don't know."
         3. Answer within one paragraph. Write only in prose.
-        4. DO NOT mention "the context" in your answer. DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
+        4. DO NOT mention "the context" in your answer. Instead, refer to the context as "the reddit comments". DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
 
         
         Context: {context}
