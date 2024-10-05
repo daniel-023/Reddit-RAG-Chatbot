@@ -18,9 +18,9 @@ class RAGChatbot:
         The context contains a list of posts and comments in the format [Post title: Comment].
         Follow these guidelines:
         1. Formulate your answer using information provided in the context.
-        2. If not enough informaton is available to answer the question, respond with "I don't know."
+        2. DO NOT use "the context" when phrasing your answer. Instead, refer to the context as "the reddit comments". DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
         3. Answer within one paragraph. Write only in prose.
-        4. DO NOT mention "the context" in your answer. Instead, refer to the context as "the reddit comments". DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
+        4. If not enough informaton is available to answer the question, respond with "I don't know."
 
         
         Context: {context}
