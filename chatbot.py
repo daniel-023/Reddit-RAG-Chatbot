@@ -69,14 +69,4 @@ class RAGChatbot:
         )
         return rag_chain.invoke(inputs)
 
-          
-
-          
-# Sample questions:
-# What do students feel about the new FGO system for their grades?
-# What challenges do NTU university students face?
-# What do NTU students discuss in this subreddit?
-# What do the university students feel about the campus transport?
-# What type of academic questions do the students ask in this subreddit? Be specific about the students' majors and questions asked.
-# Tell me more about NTU students' daily lives.
-# According to the subreddit, what are the most popular clubs in NTU?
+        
