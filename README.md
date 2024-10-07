@@ -30,3 +30,5 @@ By interacting with the chatbot, users can understand how students feel about un
 [Scraping Reddit using Python](https://www.geeksforgeeks.org/scraping-reddit-using-python/)
 
 [Build a Simple RAG Chatbot with LangChain](https://medium.com/credera-engineering/build-a-simple-rag-chatbot-with-langchain-b96b233e1b2a)
+
+[How to Build a Simple RAG-based LLM Chatbot](https://medium.com/@turna.fardousi/how-to-build-a-simple-rag-llm-chatbot-47f3fcec8c85)
