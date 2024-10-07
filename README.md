@@ -17,9 +17,11 @@ By interacting with the chatbot, users can understand how students feel about un
 [PRAW (Python Reddit API Wrapper)](https://github.com/praw-dev/praw) 
 ### Vector Database
 [FAISS (Facebook AI Similarity Search)](https://github.com/facebookresearch/faiss)
+
 [Sentence Transformers](https://www.sbert.net/)
 ### RAG Pipeline
 [LangChain](https://github.com/hwchase17/langchain)
+
 [Hugging Face Transformers](https://huggingface.co/transformers/)
 ### App Framework
 [Streamlit](https://streamlit.io/) 
