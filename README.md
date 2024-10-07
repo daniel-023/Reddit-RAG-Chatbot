@@ -13,20 +13,13 @@ This project aims to index conversations in the Nanyang Technological University
 By interacting with the chatbot, users can understand how students feel about undergraduate housing, campus transport, academic policies, and more.
 
 ## Tech Stack
-### Data Collection
-[PRAW (Python Reddit API Wrapper)](https://github.com/praw-dev/praw) 
-### Vector Database
-[FAISS (Facebook AI Similarity Search)](https://github.com/facebookresearch/faiss)
-
-[Sentence Transformers](https://www.sbert.net/)
-### RAG Pipeline
-[LangChain](https://github.com/hwchase17/langchain)
-
-[Hugging Face Transformers](https://huggingface.co/transformers/)
-### App Framework
-[Streamlit](https://streamlit.io/) 
-### Data Automation
-[GitHub Actions](https://github.com/features/actions)
+- PRAW (Python Reddit API Wrapper)
+- FAISS (Facebook AI Similarity Search)
+- Sentence Transformers
+- LangChain
+- Hugging Face Transformers
+- Streamlit
+- GitHub Actions
   
 ## References
 [Scraping Reddit using Python](https://www.geeksforgeeks.org/scraping-reddit-using-python/)
