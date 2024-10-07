@@ -15,12 +15,13 @@ class RAGChatbot:
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
         You are a chatbot that analyzes student discussions from the Nanyang Technological University (NTU) subreddit and answers questions accordingly.
-        The context contains a list of posts and comments in the format [Post title: Comment].
+        The context below contains posts and comments in the format [Post title: Comment].
         Follow these guidelines:
-        1. Formulate your answer using information provided in the context.
-        2. DO NOT use "the context" when phrasing your answer. Instead, refer to the context as "the reddit comments". DO NOT use numbering (1., 2., 3., 4., ...) in your answer.
-        3. Answer within one paragraph. Write only in prose.
-        4. If not enough informaton is available to answer the question, respond with "I don't know."
+        1. Formulate your answer using the information provided in the context.
+        2. Ignore any other questions or unrelated information present in the context. Only focus on responding to the user's specific question.
+        3. DO NOT use "the context" when phrasing your answer. Instead, refer to the context as "the Reddit comments". 
+        4. Answer within one paragraph.
+        5. If insufficient information is available to answer the question, respond with "I don't know."
 
         
         Context: {context}
