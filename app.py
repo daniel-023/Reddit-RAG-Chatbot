@@ -43,9 +43,9 @@ with st.sidebar:
     st.header("About")
     st.markdown(
         """
-        This chatbot uses Retrieval-Augmented Generation (RAG) to analyse discussions from the Nanyang Technological University (NTU) subreddit. 
-        Ask questions about student life, academic concerns, housing, social activities, and more. 
-        The chatbot provides concise, specific responses by quoting posts and comments from the subreddit over the past year. 
+        This chatbot uses Retrieval-Augmented Generation (RAG) to analyse conversations in the Nanyang Technological University (NTU) subreddit. 
+        It generates answers based on context from posts and comments in the subreddit over the past year. 
+        Ask questions about student life, campus housing, academic concerns, social activities, and more! 
         """
     )
 
