@@ -12,28 +12,6 @@ This project aims to index conversations in the Nanyang Technological University
 
 By interacting with the chatbot, users can understand how students feel about undergraduate housing, campus transport, academic policies, and more.
 
-### RAG Pipeline Flowchart
-
-```mermaid 
-flowchart TD;
-    %% Nodes;
-    A[Reddit Data];
-    B[Vector Database];
-    C[User Query];
-    D[Top-K Retrieval];
-    E[LLM];
-    F[Answer];
-    G[User];
-
-    %% Connections;
-    A --> B;
-    B --> D;
-    C --> D;
-    D --> E;
-    C --> E;
-    E --> F;
-    F --> G;
-
 ## Tech Stack
 - PRAW (Python Reddit API Wrapper)
 - FAISS (Facebook AI Similarity Search)
