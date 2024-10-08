@@ -1,26 +1,31 @@
 # r/NTU Retrieval-Augmented Generation (RAG) Chatbot
-
 > [!WARNING]
 > The LLM may generate hallucinations or misinformation.
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [Tech Stack](#tech-stack)
+- [Running the Chatbot](#running-the-chatbot)
 - [References](#references)
 ## Introduction
 This project aims to index conversations in the Nanyang Technological University's (NTU) subreddit, enabling outsiders to gain insight into the daily lives of university students.
 
 By interacting with the chatbot, users can understand how students feel about undergraduate housing, campus transport, academic policies, and more.
 
+![rag_pipeline.png](assets/rag_pipeline.png)
+
 ## Tech Stack
-1. PRAW (Python Reddit API Wrapper)
-2. FAISS (Facebook AI Similarity Search)
-3. Sentence Transformers
-4. LangChain
-5. Hugging Face Transformers
-6. Streamlit
-7. GitHub Actions
-  
+1. PRAW (Reddit API Wrapper)
+2. Sentence Transformers (Embedding Model)
+3. FAISS (Vector Database)
+4. LangChain (LLM Framework)
+5. Zephyr 7B β (LLM)
+6. Streamlit (App Framework)
+7. GitHub Actions (Data Automation)
+
+## Running the Chatbot
+You can test the chatbot [here](https://ntu-reddit-chatbot.streamlit.app/)
+![RAG-Chatbot-Demo.gif](assets/RAG-Chatbot-Demo.gif)
 ## References
 [Scraping Reddit using Python](https://www.geeksforgeeks.org/scraping-reddit-using-python/)
 
