@@ -11,7 +11,7 @@ class RAGChatbot:
         self.embeddings = None
         self.index = index
         self.api_key = api_key
-        self.model = SentenceTransformer('all-mpnet-base-v2')
+        self.model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
         self.prompt = PromptTemplate(input_variables=["context", "question"],
             template= """
         You are a chatbot that analyzes student discussions from the Nanyang Technological University (NTU) subreddit and answers questions accordingly.
