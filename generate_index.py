@@ -11,7 +11,7 @@ df.fillna({'Title': 'No Title', 'Text': 'No Text'}, inplace=True)
 documents = (df['Title'] + ": " + df['Text']).tolist()
 
 # Build vector DB
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-mpnet-base-v2')
 embeddings = model.encode([text for text in documents])
 
 # Create a FAISS index
