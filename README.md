@@ -8,7 +8,7 @@
 - [Running the Chatbot](#running-the-chatbot)
 - [References](#references)
 ## Introduction
-- This project aims to give users some insight into the daily lives of Nanyang Technological University (NTU) students by indexing their conversations in the NTU subreddit.
+- This project aims to give users some insight into the daily lives of Nanyang Technological University (NTU) students by indexing their conversations in the [NTU subreddit](https://www.reddit.com/r/NTU/).
 - The information is accessible via interaction with a Retrieval-Augmented Generation (RAG) chatbot.
 - The database is updated monthly to contain Reddit posts and comments over the past year.
   
