@@ -25,6 +25,7 @@
 
 ## Running the Chatbot
 You can test the chatbot [here](https://ntu-reddit-chatbot.streamlit.app/)
+
 ![RAG-Chatbot-Demo.gif](assets/RAG-Chatbot-Demo.gif)
 ## References
 [Scraping Reddit using Python](https://www.geeksforgeeks.org/scraping-reddit-using-python/)
