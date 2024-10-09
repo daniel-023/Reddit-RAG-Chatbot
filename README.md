@@ -32,3 +32,4 @@ You can test the chatbot [here](https://ntu-reddit-chatbot.streamlit.app/)
 [Build a Simple RAG Chatbot with LangChain](https://medium.com/credera-engineering/build-a-simple-rag-chatbot-with-langchain-b96b233e1b2a)
 
 [How to Build a Simple RAG-based LLM Chatbot](https://medium.com/@turna.fardousi/how-to-build-a-simple-rag-llm-chatbot-47f3fcec8c85)
+[Building a QA Chatbot with Memory](https://jeevaharan.medium.com/building-a-qa-chatbot-with-memory-using-langchain-faiss-streamlit-and-openai-retrieval-augmented-24384d5f2070)
