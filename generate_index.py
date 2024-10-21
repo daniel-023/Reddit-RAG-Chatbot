@@ -11,11 +11,11 @@ df.fillna({'Title': 'No Title', 'Text': 'No Text'}, inplace=True)
 documents = (df['Title'] + ": " + df['Text']).tolist()
 
 # Build vector DB
-model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
-embeddings = model.encode([text for text in documents])
+model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
+embeddings = model.encode([text for text in documents], show_progress_bar=True)
 
 # Create a FAISS index
-index = faiss.IndexFlatL2(embeddings.shape[1])  # L2 distance: Euclidean distance
+index = faiss.IndexFlatIP(embeddings.shape[1])  # IP: Inner Product
 index.add(np.array(embeddings))
 
 faiss.write_index(index, 'data/faiss_index.index')
