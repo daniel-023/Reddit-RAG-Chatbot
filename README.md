@@ -16,7 +16,7 @@
 
 ## Tech Stack
 1. PRAW (Reddit API Wrapper)
-2. multi-qa-MiniLM-L6-cos-v1 (Embedding Model)
+2. multi-qa-mpnet-base-dot-v1 (Embedding Model)
 3. FAISS (Vector Database)
 4. LangChain (LLM Framework)
 5. Zephyr 7B β (LLM)
