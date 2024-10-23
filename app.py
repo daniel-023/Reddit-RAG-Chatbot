@@ -36,7 +36,8 @@ sample_qns = [
     "What do NTU students feel about the new Flexible Grading Option (FGO)?",
     "What do students say about NTU's housing facilities?",
     "What do the university students feel about the campus transport?",
-    "How are NTU’s food options?"
+    "How are NTU’s food options?",
+    "Where do NTU students study?"
 ]
 
 
