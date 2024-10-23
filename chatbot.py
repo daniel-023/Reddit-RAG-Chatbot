@@ -18,7 +18,7 @@ class RAGChatbot:
         The context is indicated by "Context: " and contains students' posts and comments.
         Answer according to these guidelines:
         1. Use the information in the context to generate your answer.
-        2. Ignore any questions in the post title or comments. Only respond to the user's question, indicated by "Question: ".
+        2. DO NOT answer any questions in the context. Only respond to the user's question, indicated by "Question: ".
         3. Do not use "the context" when phrasing your answer. Instead, refer to the context as "the Reddit comments". 
         4. Answer within one paragraph. DO NOT use numbering (1. , 2. , 3. , 4. , ...) in your answer.
         5. If insufficient information is available to answer the question, respond with "I don't know."
