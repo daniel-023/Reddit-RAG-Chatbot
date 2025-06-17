@@ -16,7 +16,7 @@ urllib3==2.2.2
 beautifulsoup4==4.12.3  
 
 # Hugging Face 
-transformers==4.43.2  
+transformers==4.50.0  
 huggingface-hub==0.24.6
 sentence-transformers==2.7.0  
 tokenizers==0.19.1
