@@ -19,7 +19,7 @@
 2. multi-qa-mpnet-base-dot-v1 (Embedding Model)
 3. FAISS (Vector Database)
 4. LangChain (LLM Framework)
-5. Zephyr 7B β (LLM)
+5. Mistral-7B-Instruct-v0.3 (LLM)
 6. Streamlit (App Framework)
 7. GitHub Actions (Data Automation)
 
