@@ -6,7 +6,7 @@ scikit-learn==1.5.1
 scipy==1.14.1
 matplotlib==3.9.2
 altair==5.4.1
-pydeck==0.9.1  # Optional: for interactive maps
+pydeck==0.9.1  
 
 # Reddit scraping 
 praw==7.7.1
