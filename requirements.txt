@@ -23,7 +23,7 @@ tokenizers==0.19.1
 
 # LangChain
 langchain==0.2.16
-langchain-core==0.2.38
+langchain-core==0.2.43
 langchain-community==0.2.16
 langchain-huggingface==0.0.3
 langsmith==0.1.114
