@@ -47,11 +47,18 @@ class RAGChatbot:
     
 
     def _initialize_llm(self):
-        return HuggingFaceEndpoint(
-            repo_id="aisingapore/Llama-SEA-LION-v3.5-8B-R", 
-            top_k=20, 
-            huggingfacehub_api_token=self.api_key  # Load token from environment variable
-        )
+    return HuggingFaceEndpoint(
+        repo_id="aisingapore/Llama-SEA-LION-v3.5-8B-R",
+        huggingfacehub_api_token=self.api_key,
+        temperature=0.7,
+        top_k=20,
+        max_new_tokens=256,
+        timeout=120,                 
+        options={                    
+            "wait_for_model": True,  
+            "use_cache": True       
+        },
+    )
     
 
     def generate_answer(self, query):
