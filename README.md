@@ -23,8 +23,6 @@
 6. Streamlit (App Framework)
 7. GitHub Actions (Data Automation)
 
-## Running the Chatbot
-You can test the chatbot [here](https://ntu-reddit-chatbot.streamlit.app/)
 
 ![RAG-Chatbot-Demo.gif](assets/RAG-Chatbot-Demo.gif)
 ## References
