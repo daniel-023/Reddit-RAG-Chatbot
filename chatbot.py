@@ -48,7 +48,7 @@ class RAGChatbot:
 
     def _initialize_llm(self):
         return HuggingFaceEndpoint(
-            repo_id="aisingapore/Llama-SEA-LION-v3.5-8B-R",
+            repo_id="mistralai/Mistral-7B-Instruct-v0.3",
             huggingfacehub_api_token=self.api_key,
             temperature=0.7,
             top_k=20,
