@@ -37,8 +37,8 @@ pip install -r requirements.txt
 ```
 
 Note:
-- GitHub Actions in this repo runs on Python 3.9.
-- `requirements.txt` is kept Python 3.9 compatible, but local macOS runs are typically more stable on Python 3.11.
+- GitHub Actions in this repo runs on Python 3.11.
+- Local setup also targets Python 3.11 for consistency with CI.
 
 Create `.streamlit/secrets.toml`:
 
