@@ -3,16 +3,12 @@
 > The LLM can still generate incorrect or incomplete answers. Always verify important information.
 
 ## Overview
-This project builds a chatbot over posts/comments from [r/NTU](https://www.reddit.com/r/NTU/), using:
-- Reddit scraping with PRAW
-- Chunked semantic retrieval
-- Reranking (optional on macOS)
-- LLM answer generation via Hugging Face Inference
-- Streamlit chat UI with source snippets
+This project provides a chatbot for exploring student discussions in [r/NTU](https://www.reddit.com/r/NTU/).  
+It periodically collects recent subreddit posts/comments, builds searchable vector artifacts, and answers user questions with retrieved Reddit evidence in a Streamlit chat interface.
 
 ![RAG pipeline](assets/rag_pipeline.png)
 
-## Current Stack
+## Tech Stack
 1. `praw` for Reddit API scraping
 2. `multi-qa-mpnet-base-dot-v1` for embeddings
 3. `faiss-cpu` for vector index artifacts

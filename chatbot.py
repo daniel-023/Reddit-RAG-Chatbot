@@ -1,10 +1,9 @@
 import numpy as np
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import os
-import platform
 import torch
 
 
@@ -40,15 +39,7 @@ class RAGChatbot:
             # In that case, keep current interop thread settings instead of crashing.
             pass
 
-        # Default to safer behavior on macOS; can be overridden via env.
-        cross_encoder_flag = os.getenv("ENABLE_CROSS_ENCODER_RERANKER")
-        if cross_encoder_flag is None:
-            self.enable_cross_encoder_reranker = platform.system() != "Darwin"
-        else:
-            self.enable_cross_encoder_reranker = cross_encoder_flag.lower() in {"1", "true", "yes"}
-
         self.model = SentenceTransformer('multi-qa-mpnet-base-dot-v1', device="cpu")
-        self.reranker = None
         self.prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -146,23 +137,6 @@ User question:
         return results
 
 
-    def rerank_documents(self, query, documents, top_k):
-        if not documents:
-            return []
-        if len(documents) <= top_k:
-            return documents
-        if not self.enable_cross_encoder_reranker:
-            return documents[:top_k]
-
-        if self.reranker is None:
-            self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2', device="cpu")
-
-        pairs = [[query, doc["content"]] for doc in documents]
-        scores = self.reranker.predict(pairs)
-        ranked_indices = np.argsort(scores)[::-1]
-        return [documents[i] for i in ranked_indices[:top_k]]
-    
-
     def _initialize_llm(self, provider: str):
         endpoint_llm = HuggingFaceEndpoint(
             repo_id=self.llm_repo_id,
@@ -191,8 +165,8 @@ User question:
                 "answer": "I don't know based on the retrieved Reddit comments.",
                 "sources": [],
             }
-        reranked_documents = self.rerank_documents(query, retrieved_documents, top_k=5)
-        relevant_contexts = "\n".join([doc["content"] for doc in reranked_documents])
+        selected_documents = retrieved_documents[:5]
+        relevant_contexts = "\n".join([doc["content"] for doc in selected_documents])
 
         inputs = {
             "context": relevant_contexts,
@@ -219,7 +193,7 @@ User question:
                 "timestamp": doc["timestamp"],
                 "snippet": doc["content"][:280],
             }
-            for doc in reranked_documents[:3]
+            for doc in selected_documents[:3]
         ]
         return {"answer": answer, "sources": sources}
 
