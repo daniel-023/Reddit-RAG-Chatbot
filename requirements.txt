@@ -1,45 +1,8 @@
-# Core dependencies
-streamlit==1.38.0
-pandas==2.2.2
-numpy==1.26.4
-scikit-learn==1.5.1
-scipy==1.14.1
-matplotlib==3.9.2
-altair==5.4.1
-pydeck==0.9.1
-
-# Reddit scraping
-praw==7.7.1
-prawcore==2.4.0
-requests==2.32.3
-urllib3==2.2.2
-beautifulsoup4==4.12.3
-
-# Hugging Face ecosystem
-transformers==4.43.2
-huggingface-hub==0.24.6
-sentence-transformers==2.7.0
-tokenizers==0.19.1
-
-# LangChain ecosystem
-langchain==0.2.16
-langchain-core==0.2.38
-langchain-community==0.2.16
-langchain-huggingface==0.0.3
-langsmith==0.1.114
-langchain-text-splitters==0.2.4
-
-# Vector DB
-faiss-cpu==1.8.0.post1
-
-# Utilities
-python-dotenv==1.0.1
-pyyaml==6.0.2
-tenacity==8.5.0
-typing-extensions==4.12.2
-dataclasses-json==0.6.7
-joblib==1.4.2
-tqdm==4.66.5
-filelock==3.15.4
-regex==2024.7.24
-packaging==24.1
+streamlit==1.50.0
+pandas==2.3.3
+numpy==2.0.2
+praw==7.8.1
+sentence-transformers==5.1.2
+langchain==0.3.28
+langchain-huggingface==0.3.1
+faiss-cpu==1.13.0

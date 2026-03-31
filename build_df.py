@@ -3,6 +3,19 @@ import praw
 import os
 from datetime import datetime, timezone, timedelta
 
+EXPECTED_COLUMNS = [
+    "Type",
+    "Post_id",
+    "Comment_id",
+    "Title",
+    "Author",
+    "Timestamp",
+    "Text",
+    "Score",
+    "Total_comments",
+    "Post_URL",
+]
+
 
 def initialize_reddit_scraper():
     client_id = os.getenv('REDDIT_CLIENT_ID')
@@ -48,7 +61,7 @@ def scrape_posts(reddit, subreddit_name, start_date, end_date, limit = 1000):
                 post.comments.replace_more(limit=None)
                 for comment in post.comments.list():
                     comment_timestamp = datetime.fromtimestamp(comment.created_utc, tz=timezone.utc)
-                    if start_date <= post_datetime <= end_date:
+                    if start_date <= comment_timestamp <= end_date:
                         data.append({
                             'Type': 'Comment',
                             'Post_id': post.id,
@@ -69,9 +82,11 @@ def update_reddit_data(subreddit_name='NTU'):
 
     try:
         df = pd.read_csv('data/reddit_data.csv')
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        if 'Timestamp' not in df.columns:
+            df['Timestamp'] = pd.NaT
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'], utc=True, errors='coerce')
     except FileNotFoundError:
-        df = pd.DataFrame()
+        df = pd.DataFrame(columns=EXPECTED_COLUMNS)
         
     reddit = initialize_reddit_scraper()
 
@@ -82,11 +97,17 @@ def update_reddit_data(subreddit_name='NTU'):
     new_data = scrape_posts(reddit, subreddit_name, start_date, end_date)
 
     if not new_data.empty:
+        new_data['Timestamp'] = pd.to_datetime(new_data['Timestamp'], utc=True, errors='coerce')
         df = pd.concat([df, new_data], ignore_index=True)
         df.drop_duplicates(subset=['Type', 'Post_id', 'Comment_id'], inplace=True)
 
     one_year_ago = end_date - timedelta(days=365)
-    df = df[df['Timestamp'] >= one_year_ago]
+    if 'Timestamp' not in df.columns:
+        df['Timestamp'] = pd.NaT
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], utc=True, errors='coerce')
+    df = df[df['Timestamp'].notna() & (df['Timestamp'] >= one_year_ago)]
+    if not df.empty:
+        df.sort_values('Timestamp', inplace=True)
 
     df.to_csv('data/reddit_data.csv', index=False)
 

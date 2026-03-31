@@ -1,35 +1,97 @@
 # r/NTU Retrieval-Augmented Generation (RAG) Chatbot
 > [!WARNING]
-> The LLM may generate hallucinations or misinformation.
+> The LLM can still generate incorrect or incomplete answers. Always verify important information.
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Tech Stack](#tech-stack)
-- [Running the Chatbot](#running-the-chatbot)
-- [References](#references)
-## Introduction
-- This project aims to give users some insight into the daily lives of Nanyang Technological University (NTU) students by indexing their conversations in the [NTU subreddit](https://www.reddit.com/r/NTU/).
-- The information is accessible via interaction with a Retrieval-Augmented Generation (RAG) chatbot.
-- The database is updated monthly to contain Reddit posts and comments over the past year.
-  
-![rag_pipeline.png](assets/rag_pipeline.png)
+## Overview
+This project builds a chatbot over posts/comments from [r/NTU](https://www.reddit.com/r/NTU/), using:
+- Reddit scraping with PRAW
+- Chunked semantic retrieval
+- Reranking (optional on macOS)
+- LLM answer generation via Hugging Face Inference
+- Streamlit chat UI with source snippets
 
-## Tech Stack
-1. PRAW (Reddit API Wrapper)
-2. multi-qa-mpnet-base-dot-v1 (Embedding Model)
-3. FAISS (Vector Database)
-4. LangChain (LLM Framework)
-5. Mistral-7B-Instruct-v0.3 (LLM)
-6. Streamlit (App Framework)
-7. GitHub Actions (Data Automation)
+![RAG pipeline](assets/rag_pipeline.png)
 
+## Current Stack
+1. `praw` for Reddit API scraping
+2. `multi-qa-mpnet-base-dot-v1` for embeddings
+3. `faiss-cpu` for vector index artifacts
+4. NumPy cosine retrieval backend on macOS (runtime stability path)
+5. `meta-llama/Meta-Llama-3.1-8B-Instruct` as default chat model
+6. Streamlit frontend
+7. GitHub Actions monthly data/index refresh
 
-![RAG-Chatbot-Demo.gif](assets/RAG-Chatbot-Demo.gif)
-## References
-[Scraping Reddit using Python](https://www.geeksforgeeks.org/scraping-reddit-using-python/)
+## Data Artifacts
+`generate_index.py` produces:
+- `data/faiss_index.index`
+- `data/faiss_metadata.csv`
+- `data/embeddings.npy`
 
-[Build a Simple RAG Chatbot with LangChain](https://medium.com/credera-engineering/build-a-simple-rag-chatbot-with-langchain-b96b233e1b2a)
+App usage:
+- macOS runtime uses `data/embeddings.npy` (to avoid FAISS + encoder crash path)
+- non-macOS runtime uses `data/faiss_index.index`
 
-[How to Build a Simple RAG-based LLM Chatbot](https://medium.com/@turna.fardousi/how-to-build-a-simple-rag-llm-chatbot-47f3fcec8c85)
+## Local Setup
+Recommended for local macOS runtime stability (Conda, Python 3.11):
 
-[Building a QA Chatbot with Memory](https://jeevaharan.medium.com/building-a-qa-chatbot-with-memory-using-langchain-faiss-streamlit-and-openai-retrieval-augmented-24384d5f2070)
+```bash
+conda create -n reddit-rag-py311 python=3.11 -y
+conda activate reddit-rag-py311
+pip install -U pip
+pip install -r requirements.txt
+```
+
+Note:
+- GitHub Actions in this repo runs on Python 3.9.
+- `requirements.txt` is kept Python 3.9 compatible, but local macOS runs are typically more stable on Python 3.11.
+
+Create `.streamlit/secrets.toml`:
+
+```toml
+HUGGINGFACE_API_KEY = "hf_..."
+```
+
+You can also use an environment variable:
+
+```bash
+export HUGGINGFACE_API_KEY="hf_..."
+```
+
+## Build / Refresh Data Locally
+1. Update subreddit data:
+```bash
+python build_df.py
+```
+2. Rebuild retrieval artifacts:
+```bash
+python generate_index.py
+```
+3. Run app:
+```bash
+streamlit run app.py
+```
+
+## Optional Provider Controls
+The chatbot uses Hugging Face provider routing with fallback:
+- `HF_INFERENCE_PROVIDER` (default: `hf-inference`)
+- `HF_INFERENCE_PROVIDER_FALLBACKS` (default: `auto`)
+
+Example:
+```bash
+HF_INFERENCE_PROVIDER=hf-inference HF_INFERENCE_PROVIDER_FALLBACKS=auto streamlit run app.py
+```
+
+## GitHub Actions (Optional)
+If enabled, `.github/workflows/update_reddit_data.yaml` will:
+- run monthly (and manually on dispatch)
+- refresh `reddit_data.csv` + index artifacts
+- commit and push updated `data/*` files
+
+If you keep this workflow active, local updates are as simple as:
+```bash
+git pull
+```
+
+## Notes
+- App shows **Data freshness in Singapore time (SGT)**.
+- If `data/faiss_metadata.csv` is missing, the app still runs but source precision is reduced.

@@ -6,23 +6,31 @@ on:
     - cron: "0 0 1 * *"
   workflow_dispatch:
 
+concurrency:
+  group: update-reddit-data-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
 jobs: 
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
 
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      with:
+        fetch-depth: 0
 
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
-        python-version: '3.11'
+        python-version: '3.9'
+        cache: 'pip'
 
 
     - name: Install dependencies
@@ -47,6 +55,11 @@ jobs:
       run: |
         git config --local user.email "actions@github.com"
         git config --local user.name "GitHub Actions"
-        git add data/reddit_data.csv data/faiss_index.index    
+        git add data/reddit_data.csv data/faiss_index.index data/faiss_metadata.csv data/embeddings.npy
+        if git diff --cached --quiet; then
+          echo "No data/index changes to commit."
+          exit 0
+        fi
         git commit -m "Updated Reddit data for the last month"
-        git push origin main
+        git pull --rebase origin main
+        git push origin HEAD:main
