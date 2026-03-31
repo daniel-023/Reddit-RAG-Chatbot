@@ -23,11 +23,7 @@ class RAGChatbot:
         self.index_is_matrix = isinstance(index, np.ndarray)
         self.api_key = api_key
         self.llm_repo_id = llm_repo_id
-        configured_provider = os.getenv("HF_INFERENCE_PROVIDER", "hf-inference")
-        fallback_providers = os.getenv("HF_INFERENCE_PROVIDER_FALLBACKS", "auto")
-        provider_candidates = [configured_provider] + [p.strip() for p in fallback_providers.split(",") if p.strip()]
-        # Keep order, remove duplicates.
-        self.provider_candidates = list(dict.fromkeys(provider_candidates))
+        self.provider_candidates = ["hf-inference", "auto"]
         self.provider_index = 0
         os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
         os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")

@@ -16,7 +16,7 @@ This project builds a chatbot over posts/comments from [r/NTU](https://www.reddi
 1. `praw` for Reddit API scraping
 2. `multi-qa-mpnet-base-dot-v1` for embeddings
 3. `faiss-cpu` for vector index artifacts
-4. NumPy cosine retrieval backend on macOS (runtime stability path)
+4. FAISS/NumPy cosine retrieval backend
 5. `meta-llama/Meta-Llama-3.1-8B-Instruct` as default chat model
 6. Streamlit frontend
 7. GitHub Actions monthly data/index refresh
@@ -28,8 +28,7 @@ This project builds a chatbot over posts/comments from [r/NTU](https://www.reddi
 - `data/embeddings.npy`
 
 App usage:
-- macOS runtime uses `data/embeddings.npy` (to avoid FAISS + encoder crash path)
-- non-macOS runtime uses `data/faiss_index.index`
+- Runtime retrieval backend is selected automatically based on platform.
 
 ## Local Setup
 Recommended for local macOS runtime stability (Conda, Python 3.11):
@@ -69,16 +68,6 @@ python generate_index.py
 3. Run app:
 ```bash
 streamlit run app.py
-```
-
-## Optional Provider Controls
-The chatbot uses Hugging Face provider routing with fallback:
-- `HF_INFERENCE_PROVIDER` (default: `hf-inference`)
-- `HF_INFERENCE_PROVIDER_FALLBACKS` (default: `auto`)
-
-Example:
-```bash
-HF_INFERENCE_PROVIDER=hf-inference HF_INFERENCE_PROVIDER_FALLBACKS=auto streamlit run app.py
 ```
 
 ## GitHub Actions (Optional)
