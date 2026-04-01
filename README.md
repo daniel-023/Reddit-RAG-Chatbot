@@ -27,7 +27,6 @@ App usage:
 - Runtime retrieval backend is selected automatically based on platform.
 
 ## Local Setup
-Recommended for local macOS runtime stability (Conda, Python 3.11):
 
 ```bash
 conda create -n reddit-rag-py311 python=3.11 -y
@@ -35,10 +34,6 @@ conda activate reddit-rag-py311
 pip install -U pip
 pip install -r requirements.txt
 ```
-
-Note:
-- GitHub Actions in this repo runs on Python 3.11.
-- Local setup also targets Python 3.11 for consistency with CI.
 
 Create `.streamlit/secrets.toml`:
 
